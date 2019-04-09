@@ -9,6 +9,7 @@ module.exports = {
         path: outputDir,
         filename: 'bundle.js'
     },
+    devtool: 'source-map',
     module: {
         rules: [{
             test: /\.js$/,
