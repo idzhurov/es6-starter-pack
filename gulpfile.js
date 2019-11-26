@@ -1,14 +1,10 @@
 let gulp = require("gulp");
-let webpack = require('webpack-stream');
-let OUT_DIR = './build';
+let webpack = require('webpack');
+
+const tasks = require("./tasks/gulptasks.js");
 let {
     argv
 } = require('yargs');
-
-// always copy the html first to dist folder
-let srcHTML = './app/template/index.html';
-let srcCSS = './app/template/style.css';
-let srcAssets = './app/assets/*';
 
 // setting up the environment to pass to wbpack
 if (argv.production) {
@@ -19,16 +15,27 @@ if (argv.development) {
     process.env.NODE_ENV = 'development';
 }
 
-gulp.task('copy:html', () => gulp.src(srcHTML).pipe(gulp.dest(OUT_DIR)));
-gulp.task('copy:css', () => gulp.src(srcCSS).pipe(gulp.dest(OUT_DIR)));
-gulp.task('copy:assets', () => gulp.src(srcAssets).pipe(gulp.dest(OUT_DIR + '/assets/')));
+const webpackConfig = process.env.NODE_ENV = 'production' ? "./webpack.config.prod.js" : "./webpack.config.js";
 
 // run webpack to compile the script into a bundle
-gulp.task('webpack', () => {
-    return gulp.src('build/')
-        .pipe(webpack(require('./webpack.config.js')))
-        .pipe(gulp.dest('build/'));
-});
+function compile(done) {
+    
+    return new Promise((resolve, reject) => {
+        webpack(require(webpackConfig), (err, stats) => {
+            if (err) {
+                return reject(err);
+            }
+            if (stats.hasErrors()) {
+                return reject(new Error(stats));
+            }
+            resolve();
+        });
+    });
+}
+
+gulp.task('copy:html', tasks.copyHtml);
+gulp.task('copy:css', tasks.copyCss);
+gulp.task('copy:assets', tasks.copyAssets);
 
 // default includes all
-gulp.task('default', ['copy:html', 'copy:css', 'copy:assets', 'webpack']);
+gulp.task("default", gulp.series(tasks.clean, tasks.copyAssets, tasks.copyHtml, tasks.copyCss, compile));
