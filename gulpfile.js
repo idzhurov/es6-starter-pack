@@ -1,30 +1,30 @@
 let gulp = require("gulp");
-let webpack = require('webpack');
+let webpack = require("webpack");
 
 const tasks = require("./tasks/gulptasks.js");
-let {
-    argv
-} = require('yargs');
+let { argv } = require("yargs");
 
 // setting up the environment to pass to wbpack
 if (argv.production) {
-    process.env.NODE_ENV = 'production';
+    process.env.NODE_ENV = "production";
 }
 
 if (argv.development) {
-    process.env.NODE_ENV = 'development';
+    process.env.NODE_ENV = "development";
 }
 
-const webpackConfig = process.env.NODE_ENV = 'production' ? "./webpack.config.prod.js" : "./webpack.config.js";
+const webpackConfig = (process.env.NODE_ENV = "production"
+    ? "./webpack.config.prod.js"
+    : "./webpack.config.js");
 
 // run webpack to compile the script into a bundle
 function compile(done) {
-    
     return new Promise((resolve, reject) => {
         webpack(require(webpackConfig), (err, stats) => {
             if (err) {
                 return reject(err);
             }
+
             if (stats.hasErrors()) {
                 return reject(new Error(stats));
             }
@@ -33,9 +33,12 @@ function compile(done) {
     });
 }
 
-gulp.task('copy:html', tasks.copyHtml);
-gulp.task('copy:css', tasks.copyCss);
-gulp.task('copy:assets', tasks.copyAssets);
+gulp.task("copy:html", tasks.copyHtml);
+gulp.task("copy:css", tasks.copyCss);
+gulp.task("copy:assets", tasks.copyAssets);
 
 // default includes all
-gulp.task("default", gulp.series(tasks.clean, tasks.copyAssets, tasks.copyHtml, tasks.copyCss, compile));
+gulp.task(
+    "default",
+    gulp.series(tasks.clean, tasks.copyAssets, tasks.copyHtml, tasks.copyCss, compile)
+);
