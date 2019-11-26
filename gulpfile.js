@@ -1,8 +1,8 @@
-let gulp = require("gulp");
-let webpack = require("webpack");
+const gulp = require("gulp");
+const webpack = require("webpack");
 
 const tasks = require("./tasks/gulptasks.js");
-let { argv } = require("yargs");
+const { argv } = require("yargs");
 
 // setting up the environment to pass to wbpack
 if (argv.production) {
