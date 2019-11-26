@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd build && lite-server",
+    "start": "gulp server",
     "build:dev": "gulp",
     "build:prod": "gulp --production"
   },
@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.7.4",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
+    "browser-sync": "^2.26.7",
     "del": "^5.1.0",
     "eslint": "^6.7.1",
     "eslint-config-prettier": "^6.7.0",
@@ -23,6 +24,7 @@
     "gulp": "^4.0.2",
     "lite-server": "^2.5.4",
     "prettier": "^1.19.1",
+    "source-map-loader": "^0.2.4",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
